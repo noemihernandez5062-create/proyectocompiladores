@@ -1,0 +1,8 @@
+TABLA: alumno
+COLUMNAS:
+id | nombre | direccion | edad | trabajo
+
+FILAS:
+id | nombre | direccion | edad | trabajo
+1 | jhonatan | zona7 | 20 | si
+1 | Andrea | zona3 | 18 | no

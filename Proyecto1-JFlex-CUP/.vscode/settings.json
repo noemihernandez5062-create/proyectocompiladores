@@ -1,0 +1,7 @@
+{
+  "java.project.referencedLibraries": [
+    "tools/**/*.jar",
+    "../tools/**/*.jar",
+    "C:/Compiladores/tools/*.jar"
+  ]
+}

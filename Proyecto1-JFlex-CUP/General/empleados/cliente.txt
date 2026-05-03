@@ -1,0 +1,9 @@
+TABLA: cliente
+COLUMNAS:
+id | nombre | direccion | telefono | edad | trabajo
+
+FILAS:
+id | nombre | direccion | telefono | edad | trabajo
+1 | Juan | Zona1 | 1111 | 20 | Si
+2 | Jose | Zona2 | 2222 | 21 | No
+3 | Eric | Zona3 | 3333 | 22 | Si

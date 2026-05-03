@@ -1,0 +1,119 @@
+import java_cup.runtime.*;
+
+terminal CREATE, DATABASE, USE, TABLE, SELECT, FROM, WHERE, UPDATE, SET, INSERT, INTO, VALUES;
+terminal JOIN, ON, AS;
+terminal INT_TYPE, VARCHAR, DATETIME, DECIMAL, CONTEO;
+terminal LPAREN, RPAREN, COMMA, SEMI, DOT, STAR, ASSIGN;
+terminal String IDENT;
+terminal String NUMBER;
+terminal String STRING_LITERAL;
+
+non terminal program, stmt_list, stmt;
+non terminal create_database_stmt, use_stmt, create_table_stmt, column_defs, column_def, data_type;
+non terminal select_stmt, select_list, select_item, from_clause, table_ref, alias_opt, join_list, join_clause, condition, field_ref;
+non terminal update_stmt, assignment_list, assignment, value, where_opt;
+non terminal insert_stmt, column_list_opt, column_list, value_list, insert_source;
+
+start with program;
+
+program ::= stmt_list ;
+
+stmt_list ::= stmt_list stmt
+            | stmt
+            ;
+
+stmt ::= create_database_stmt SEMI
+       | use_stmt SEMI
+       | create_table_stmt SEMI
+       | select_stmt SEMI
+       | update_stmt SEMI
+       | insert_stmt SEMI
+       ;
+
+create_database_stmt ::= CREATE DATABASE IDENT ;
+
+use_stmt ::= USE IDENT ;
+
+create_table_stmt ::= CREATE TABLE IDENT LPAREN column_defs RPAREN ;
+
+column_defs ::= column_defs COMMA column_def
+              | column_def
+              ;
+
+column_def ::= IDENT data_type
+             | IDENT
+             ;
+
+data_type ::= INT_TYPE
+            | VARCHAR LPAREN NUMBER RPAREN
+            | VARCHAR
+            | DATETIME
+            | DECIMAL LPAREN NUMBER COMMA NUMBER RPAREN
+            | DECIMAL
+            ;
+
+select_stmt ::= SELECT select_list from_clause ;
+
+select_list ::= STAR
+              | CONTEO LPAREN STAR RPAREN
+              | select_item
+              | select_list COMMA select_item
+              ;
+
+select_item ::= field_ref ;
+
+from_clause ::= FROM table_ref join_list ;
+
+join_list ::= join_list join_clause
+            | /* empty */
+            ;
+
+join_clause ::= JOIN table_ref ON LPAREN condition RPAREN ;
+
+table_ref ::= IDENT alias_opt ;
+
+alias_opt ::= IDENT
+            | AS IDENT
+            | /* empty */
+            ;
+
+field_ref ::= IDENT
+            | IDENT DOT IDENT
+            ;
+
+condition ::= field_ref ASSIGN value ;
+
+update_stmt ::= UPDATE IDENT SET assignment_list where_opt ;
+
+assignment_list ::= assignment_list COMMA assignment
+                  | assignment
+                  ;
+
+assignment ::= IDENT ASSIGN value ;
+
+where_opt ::= WHERE condition
+            | /* empty */
+            ;
+
+insert_stmt ::= INSERT INTO IDENT column_list_opt insert_source ;
+
+column_list_opt ::= LPAREN column_list RPAREN
+                  | /* empty */
+                  ;
+
+column_list ::= column_list COMMA IDENT
+              | IDENT
+              ;
+
+insert_source ::= VALUES LPAREN value_list RPAREN
+                | select_stmt
+                ;
+
+value_list ::= value_list COMMA value
+             | value
+             ;
+
+value ::= NUMBER
+        | STRING_LITERAL
+        | field_ref
+        ;
